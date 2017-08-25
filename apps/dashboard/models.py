@@ -62,6 +62,40 @@ class UserManager(models.Manager):
 
         return errors
 
+    def validate_info(self, postData):
+        errors = {}
+        # First name validation
+        if len(postData['first_name']) < 2:
+            errors['first_name'] = 'First name must be at least 2 characters'
+        elif not NAME_REGEX.match(postData['first_name']):
+            errors['first_name'] = 'First name must only be alphabet'
+        # Last name validation
+        if len(postData['last_name']) < 2:
+            errors['last_name'] = 'Last name must be at least 2 characters'
+        elif not NAME_REGEX.match(postData['first_name']):
+            errors['last_name'] = 'Last name must only be alphabet'
+        # Email validation
+        found_user = User.objects.filter(email=postData['email'])
+
+        if not EMAIL_REGEX.match(postData['email']):
+            errors['email'] = 'Email is an invalid format'
+        # If email has already been registered and is not same email as original
+        elif len(found_user) == 1 and found_user[0].email != postData['prev_email']:
+            errors['email'] = 'Email belongs to another user'
+
+        return errors
+
+    def validate_password(self, postData):
+        errors = {}
+        # Password validation
+        if len(postData['password']) < 8:
+            errors['password'] = 'Password must be at least 8 characters'
+        elif postData['password'] != postData['confirm']:
+            errors['password'] = 'Passwords must match'
+
+        return errors
+
+
 class User(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)

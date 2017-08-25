@@ -16,17 +16,44 @@
 
   <nav class="navbar-custom navbar-inverse bg-inverse">
     <div class="container">
-      <a class="navbar-brand" href="#">User Dashboard</a>
+      <a class="navbar-brand" href="/dashboard">User Dashboard</a>
         <form action="/users/logoff" method="post">
           {% csrf_token %}
           <input type="submit" class="btn btn-link btn-logoff" value="Logoff">
         </form>
     </div> <!-- container -->
   </nav>
-
+  <br>
   <div class="container">
     <h1>Welcome {{ request.session.name }}</h1>
-    <p>This is some text.</p>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Created At</th>
+          <th>Admin</th>
+          {% if curr_user.admin_level == True %}
+            <th>Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.first_name }} {{ user.last_name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.created_at | date:"F d, Y" }}</td>
+          <td>{{ user.admin_level }}</td>
+          {% if curr_user.admin_level == True %}
+            <td><a href="/users/edit/{{ user.id }}">Edit</a> <a href="#">Remove</a></td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </body>
 </html>

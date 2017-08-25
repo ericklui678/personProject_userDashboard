@@ -52,7 +52,7 @@
             <h2>Sign Up</h2>
           </div>
           <div class="form-group row">
-            <input type="text" class="form-control" name="first_name" value="Erick" placeholder="First name">
+            <input type="text" class="form-control" name="first_name" placeholder="First name">
             {% for message in messages %}
               {% if message.extra_tags == 'first_name' %}
                 <span class="red">{{ message }}</span>
@@ -60,7 +60,7 @@
             {% endfor %}
           </div>
           <div class="form-group row">
-            <input type="text" class="form-control" name="last_name" value="Lui" placeholder="Last name">
+            <input type="text" class="form-control" name="last_name" placeholder="Last name">
             {% for message in messages %}
               {% if message.extra_tags == 'last_name' %}
                 <span class="red">{{ message }}</span>
@@ -68,7 +68,7 @@
             {% endfor %}
           </div>
           <div class="form-group row">
-            <input type="text" class="form-control" name="email" value="erickjin.lui@gmail.com" placeholder="Email">
+            <input type="text" class="form-control" name="email" placeholder="Email">
             {% for message in messages %}
               {% if message.extra_tags == 'email' %}
                 <span class="red">{{ message }}</span>

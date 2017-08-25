@@ -42,9 +42,56 @@ def dashboard(request):
     if request.session.get('id') == None:
         return redirect('/')
 
-    return render(request, 'dashboard/dashboard.html')
+    context = {
+        'curr_user': User.objects.get(id=request.session['id']),
+        'users': User.objects.all()
+    }
+
+    return render(request, 'dashboard/dashboard.html', context)
 
 def user_logoff(request):
     del request.session['id']
     del request.session['name']
+
     return redirect('/')
+
+def user_edit(request, id):
+    # If logged on user is not an admin, redirect back to dashboard
+    if (User.objects.get(id=request.session['id']).admin_level == False):
+        return redirect('/dashboard')
+
+    context = {'user': User.objects.get(id=id)}
+
+    return render(request, 'dashboard/edit_user.html', context)
+
+def update(request, id):
+    errors = {}
+    if 'change_info' in request.POST:
+        if request.POST['admin_level'] == '1':
+            admin_level = True
+        else:
+            admin_level = False
+
+        postData = {
+            'email': request.POST['email'].lower(),
+            'first_name': request.POST['first_name'].title(),
+            'last_name': request.POST['last_name'].title(),
+            'admin_level': admin_level,
+            'prev_email': User.objects.get(id=id).email
+        }
+        errors = User.objects.validate_info(postData)
+
+    elif 'change_pw' in request.POST:
+        postData = {
+            'password': request.POST['password'],
+            'confirm': request.POST['confirm'],
+        }
+        errors = User.objects.validate_password(postData)
+
+    if errors:
+        for tag, error in errors.iteritems():
+            messages.error(request, error, extra_tags=tag)
+            print error
+        return redirect('/users/edit/' + id)
+
+    return redirect('/dashboard')

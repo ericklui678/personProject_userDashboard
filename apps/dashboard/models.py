@@ -83,15 +83,31 @@ class UserManager(models.Manager):
         elif len(found_user) == 1 and found_user[0].email != postData['prev_email']:
             errors['email'] = 'Email belongs to another user'
 
+        if not errors:
+            user = User.objects.get(email=postData['prev_email'])
+            user.email = postData['email']
+            user.first_name = postData['first_name']
+            user.last_name = postData['last_name']
+            user.admin_level = postData['admin_level']
+            user.save()
+
         return errors
 
     def validate_password(self, postData):
         errors = {}
-        # Password validation
         if len(postData['password']) < 8:
             errors['password'] = 'Password must be at least 8 characters'
         elif postData['password'] != postData['confirm']:
             errors['password'] = 'Passwords must match'
+
+        if not errors:
+            salt = bcrypt.gensalt()
+            password = postData['password'].encode()
+            hashed_pw = bcrypt.hashpw(password, salt)
+
+            user = User.objects.get(email=postData['prev_email'])
+            user.password = hashed_pw
+            user.save()
 
         return errors
 

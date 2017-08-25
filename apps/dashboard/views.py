@@ -77,7 +77,7 @@ def update(request, id):
             'first_name': request.POST['first_name'].title(),
             'last_name': request.POST['last_name'].title(),
             'admin_level': admin_level,
-            'prev_email': User.objects.get(id=id).email
+            'prev_email': User.objects.get(id=id).email,
         }
         errors = User.objects.validate_info(postData)
 
@@ -85,6 +85,7 @@ def update(request, id):
         postData = {
             'password': request.POST['password'],
             'confirm': request.POST['confirm'],
+            'prev_email': User.objects.get(id=id).email,
         }
         errors = User.objects.validate_password(postData)
 

@@ -19,7 +19,7 @@ class UserManager(models.Manager):
         elif not NAME_REGEX.match(postData['first_name']):
             errors['last_name'] = 'Last name must only be alphabet'
         # Email validation
-        if len(User.objects.filter(email=postData['email'].lower())) > 0:
+        if len(User.objects.filter(email=postData['email'])) > 0:
             errors['email'] = 'Email has already been registered'
         elif not EMAIL_REGEX.match(postData['email']):
             errors['email'] = 'Email is an invalid format'
@@ -41,10 +41,24 @@ class UserManager(models.Manager):
             user = User()
             user.first_name = postData['first_name'].title()
             user.last_name = postData['last_name'].title()
-            user.email = postData['email'].lower()
+            user.email = postData['email']
             user.password = hashed_pw
             user.description = ''
             user.save()
+
+        return errors
+
+    def validate_login(self, postData):
+        errors = []
+        user_exist = User.objects.filter(email=postData['email'])
+
+        if len(user_exist) == 0:
+            errors.append('Email has not been registered')
+        else:
+            form_pw = postData['password'].encode()
+            db_pw = User.objects.get(email=user_exist[0].email).password.encode()
+            if not bcrypt.checkpw(form_pw, db_pw):
+                errors.append('Incorrect password')
 
         return errors
 

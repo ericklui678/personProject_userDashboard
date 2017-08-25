@@ -8,35 +8,13 @@
 
 /* EDITS START --------------- */
 
-.log {
-  margin: 0;
+.navbar-custom {
+  padding: 0.5rem 1rem;
 }
 
 .red {
   color: red;
-}
-
-.green {
-  color: green;
-}
-
-.upper-area {
-  margin-bottom: 30px;
-}
-
-.activities {
-  border: 1px solid black;
-  padding: 10px;
-  height: 150px;
-  overflow: scroll;
-}
-
-.box {
-  border: 1px solid black;
-  text-align: center;
-  width: 23%;
-  height: 260px;
-  padding: 30px;
+  font-size: 10pt;
 }
 
 /* EDITS END -------------------*/
@@ -3077,6 +3055,14 @@ fieldset[disabled] a.btn {
   font-weight: normal;
   color: #0275d8;
   border-radius: 0;
+}
+
+.btn-logoff {
+  position: absolute;
+  right: 1rem;
+  top: 0rem;
+  color: white;
+  cursor: pointer;
 }
 
 .btn-link, .btn-link:active, .btn-link.active, .btn-link:disabled {

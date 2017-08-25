@@ -25,7 +25,7 @@
           <li class="nav-item active">
             <form class="form-inline" action="#" method="post">
               {% csrf_token %}
-              <input type="text" name="email" class="form-control mb-2 mr-sm-2 mb-sm-0" value="erickjin.lui@gmail.com" placeholder="email">
+              <input type="text" name="email" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="email">
               <input type="password" name="password" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="password">
               <input type="submit" class="btn btn-primary" value="Login">
             </form>
@@ -46,7 +46,7 @@
         </ul>
       </div>
       <div class="col">
-        <form action="#" method="post">
+        <form action="/users/create" method="post">
           {% csrf_token %}
           <div class="row">
             <h2>Sign Up</h2>

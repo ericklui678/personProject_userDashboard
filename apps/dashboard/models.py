@@ -1,6 +1,52 @@
 from __future__ import unicode_literals
-
 from django.db import models
+import bcrypt
+import re
+NAME_REGEX = re.compile(r'^[A-z]+$')
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+
+class UserManager(models.Manager):
+    def validate_register(self, postData):
+        errors = {}
+        # First name validation
+        if len(postData['first_name']) < 2:
+            errors['first_name'] = 'First name must be at least 2 characters'
+        elif not NAME_REGEX.match(postData['first_name']):
+            errors['first_name'] = 'First name must only be alphabet'
+        # Last name validation
+        if len(postData['last_name']) < 2:
+            errors['last_name'] = 'Last name must be at least 2 characters'
+        elif not NAME_REGEX.match(postData['first_name']):
+            errors['last_name'] = 'Last name must only be alphabet'
+        # Email validation
+        if len(User.objects.filter(email=postData['email'].lower())) > 0:
+            errors['email'] = 'Email has already been registered'
+        elif not EMAIL_REGEX.match(postData['email']):
+            errors['email'] = 'Email is an invalid format'
+        # Password validation
+        if len(postData['password']) < 8:
+            errors['password'] = 'Password must be at least 8 characters'
+        elif postData['password'] != postData['confirm']:
+            errors['password'] = 'Passwords must match'
+
+        if not errors:
+            # Generate salt
+            salt = bcrypt.gensalt()
+            # Form data must be encoded before hashing
+            password = postData['password'].encode()
+            # Hash password with salt
+            hashed_pw = bcrypt.hashpw(password, salt)
+
+            # Create user object
+            user = User()
+            user.first_name = postData['first_name'].title()
+            user.last_name = postData['last_name'].title()
+            user.email = postData['email'].lower()
+            user.password = hashed_pw
+            user.description = ''
+            user.save()
+
+        return errors
 
 class User(models.Model):
     first_name = models.CharField(max_length=25)
@@ -11,6 +57,12 @@ class User(models.Model):
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+
+    # Connect an instance of UserManager to User model that overwrites the keyword       # 'object' with a new one with extra properties inheried from models.Manager
+    objects = UserManager()
+
+    def __str__(self):
+        return '{} - {} - {} - {} - {} - {}'.format(self.first_name, self.last_name, self.email, self.password, self.admin_level, self.description)
 
 class Post(models.Model):
     text = models.TextField()

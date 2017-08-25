@@ -62,6 +62,13 @@
           </div>
           <div class="form-group row">
             <input type="password" class="form-control" name="password" placeholder="Password">
+            {% if messages %}
+              {% for message in messages %}
+                {% if message.extra_tags == 'password' %}
+                  {{ message }}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
           </div>
           <div class="form-group row">
             <input type="password" class="form-control" name="confirm" placeholder="Confirm password">
@@ -70,6 +77,7 @@
             <input type="submit" class="btn btn-success" value="Create Account">
           </div>
         </form>
+
       </div>
     </div>
   </div>

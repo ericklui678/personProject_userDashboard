@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from models import *
 
 def index(request):
@@ -13,6 +14,9 @@ def user_create(request):
         'password': request.POST['password'],
         'confirm': request.POST['confirm'],
     }
-    print User.objects.validate_register(postData)
+    errors = User.objects.validate_register(postData)
+    if len(errors):
+        for tag, error in errors.iteritems():
+            messages.error(request, error, extra_tags=tag)
 
     return redirect('/')

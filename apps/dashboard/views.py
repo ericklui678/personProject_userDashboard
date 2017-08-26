@@ -3,7 +3,6 @@ from django.contrib import messages
 from models import *
 
 def index(request):
-    print User.objects.all()
     if request.session.get('id') != None:
         return redirect('/dashboard')
 
@@ -61,6 +60,8 @@ def user_logoff(request):
     return redirect('/')
 
 def user_edit(request, id):
+    if request.session.get('id') == None:
+        return redirect('/')
     # If logged on user is not an admin, redirect back to dashboard
     if (User.objects.get(id=request.session['id']).admin_level == False):
         return redirect('/dashboard')
@@ -103,8 +104,10 @@ def update(request, id):
     return redirect('/dashboard')
 
 def profile(request):
+    if request.session.get('id') == None:
+        return redirect('/')
+
     context = {'user': User.objects.get(id=request.session['id'])}
-    print context['user'].description
     return render(request, 'dashboard/profile.html', context)
 
 def profile_update(request):

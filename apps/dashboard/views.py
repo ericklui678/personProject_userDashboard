@@ -138,3 +138,10 @@ def profile_update(request):
         return redirect('/users/profile/update')
 
     return redirect('/dashboard')
+
+def show(request, id):
+    if request.session.get('id') == None:
+        return redirect('/')
+
+    context = {'user': User.objects.get(id=id)}
+    return render(request, 'dashboard/show.html', context)

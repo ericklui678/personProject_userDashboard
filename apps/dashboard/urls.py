@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^users/update/(?P<id>\d+)$', views.update),
     url(r'^users/profile$', views.profile),
     url(r'^users/profile/update$', views.profile_update),
+    url(r'^users/show/(?P<id>\d+)$', views.show),
 ]

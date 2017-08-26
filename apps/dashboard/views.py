@@ -135,7 +135,7 @@ def profile_update(request):
         for tag, error in errors.iteritems():
             messages.error(request, error, extra_tags=tag)
             print error
-        return redirect('/users/profile/update')
+        return redirect('/users/profile')
 
     return redirect('/dashboard')
 

@@ -19,7 +19,7 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">User Dashboard</a>
+      <a class="btn navbar-brand" href="#">User Dashboard</a>
       <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
         <ul class="navbar-nav">
           <li class="nav-item active">
@@ -38,18 +38,25 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <h2>Welcome to the Dashboard</h2>
+        <h2 class="mb-4">Welcome to the Dashboard</h2>
+        <h4>Manage Users</h4>
         <ul>
-          <li>Manage Users</li>
-          <li>Leave Messages</li>
-          <li>Edit User information</li>
+          <li>Using this application, you'll be able to add, remove, and edit users for the application</li>
+        </ul>
+        <h4>Leave Messages</h4>
+        <ul>
+          <li>Users will be able to leave a message to another user using this application</li>
+        </ul>
+        <h4>Edit User Information</h4>
+        <ul>
+          <li>Admins will be able to edit another user's information (email, name, user level, etc)</li>
         </ul>
       </div>
       <div class="col">
         <form action="/users/create" method="post">
           {% csrf_token %}
           <div class="row">
-            <h2>Sign Up</h2>
+            <h2 class="mb-4">Sign Up</h2>
           </div>
           <div class="form-group row">
             <input type="text" class="form-control" name="first_name" placeholder="First name">

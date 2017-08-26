@@ -16,7 +16,8 @@
 
   <nav class="navbar-custom navbar-inverse bg-inverse">
     <div class="container">
-      <a class="navbar-brand" href="/dashboard">User Dashboard</a>
+      <a class="btn navbar-brand" href="/dashboard">User Dashboard</a>
+      <a class="btn btn-primary d-inline-block" href="/users/profile">Profile</a>
         <form action="/users/logoff" method="post">
           {% csrf_token %}
           <input type="submit" class="btn btn-link btn-logoff" value="Logoff">

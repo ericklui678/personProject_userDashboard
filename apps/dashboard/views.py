@@ -143,5 +143,22 @@ def show(request, id):
     if request.session.get('id') == None:
         return redirect('/')
 
-    context = {'user': User.objects.get(id=id)}
+    context = {
+        'user': User.objects.get(id=id),
+        'posts': Post.objects.filter(wall=id).order_by('-created_at')
+    }
+    print context['posts']
     return render(request, 'dashboard/show.html', context)
+
+def post_create(request, id):
+    postData = {
+        'text': request.POST['post'],
+        'user': request.session['id'],
+        'wall': int(id),
+    }
+    errors = Post.objects.validate_post(postData)
+
+    if errors:
+        messages.error(request, errors)
+
+    return redirect('/users/show/' + id)

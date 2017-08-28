@@ -42,17 +42,47 @@
       </div>
     </div>
   </div>
-  <div class="container mt-5">
+  <div class="container mt-5 mb-5">
     <h3>Leave a message for {{ user.first_name }}</h3>
     <form action="/post/create/{{ user.id }}" method="post">
       {% csrf_token %}
-      <div class="form-group">
-        <textarea class="form-control" name="post" rows="4"></textarea>
-      </div>
+      {% if messages %}
+        {% for message in messages %}
+        <div class="form-group has-danger">
+          <textarea placeholder="{{ message }}" class="form-control form-control-danger" name="post" rows="4"></textarea>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="form-group">
+          <textarea placeholder="Type something here" class="form-control" name="post" rows="4"></textarea>
+        </div>
+      {% endif %}
       <div class="d-flex justify-content-end">
         <input type="submit" class="btn btn-success" value="New Post">
       </div>
     </form>
+
+    <div class="container mt-5">
+      {% for post in posts %}
+        <div class="row">
+          <a class="mr-2" href="/users/show/{{ post.user.id }}">{{ post.user.first_name }} {{ post.user.last_name }}</a>wrote:
+        </div>
+        <div class="row">
+          {{ post.text }}
+        </div>
+        <div class="row mb-3">
+          <strong><em>{{ post.created_at | timesince }} ago</em></strong>
+        </div>
+        <form action="comment/create/{{ post.id }}/{{ post.wall.id }}" method="post">
+          <div class="form-group">
+            <textarea placeholder="Comment here" class="form-control" name="comment" rows="2"></textarea>
+          </div>
+          <div class="d-flex justify-content-end">
+            <input type="submit" class="btn btn-info" value="Reply">
+          </div>
+        </form>
+      {% endfor %}
+    </div>
   </div>
 </body>
 </html>

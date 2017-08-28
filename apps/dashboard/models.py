@@ -142,6 +142,21 @@ class UserManager(models.Manager):
 
         return errors
 
+class PostManager(models.Manager):
+    def validate_post(self, postData):
+        errors = ''
+        if len(postData['text']) < 2:
+            errors = ('Post must be at least 2 characters long')
+
+        if not errors:
+            post = Post()
+            post.text = postData['text']
+            post.user = User.objects.get(id=postData['user'])
+            post.wall = User.objects.get(id=postData['wall'])
+            post.save()
+
+        return errors
+
 
 class User(models.Model):
     first_name = models.CharField(max_length=25)
@@ -157,7 +172,7 @@ class User(models.Model):
     objects = UserManager()
 
     def __str__(self):
-        return '{} - {} - {} - {} - {} - {}'.format(self.first_name, self.last_name, self.email, self.password, self.admin_level, self.description)
+        return '{} {}'.format(self.first_name, self.last_name)
 
 class Post(models.Model):
     text = models.TextField()
@@ -165,6 +180,11 @@ class Post(models.Model):
     wall = models.ForeignKey(User, related_name="wall")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+
+    objects = PostManager()
+
+    def __str__(self):
+        return '{}___Posted by: {}___To: {}'.format(self.text, self.user, self.wall)
 
 class Comment(models.Model):
     text = models.TextField()

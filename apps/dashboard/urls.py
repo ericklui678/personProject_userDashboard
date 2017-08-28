@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^users/profile$', views.profile),
     url(r'^users/profile/update$', views.profile_update),
     url(r'^users/show/(?P<id>\d+)$', views.show),
+    url(r'^post/create/(?P<id>\d+)$', views.post_create),
 ]

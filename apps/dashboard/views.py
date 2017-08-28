@@ -33,7 +33,6 @@ def user_login(request):
         'password': request.POST['password'],
     }
     errors = User.objects.validate_login(postData)
-    print errors
     if len(errors) == 0:
         user = User.objects.get(email=postData['email'])
         request.session['id'] = user.id
@@ -98,7 +97,6 @@ def update(request, id):
     if errors:
         for tag, error in errors.iteritems():
             messages.error(request, error, extra_tags=tag)
-            print error
         return redirect('/users/edit/' + id)
 
     return redirect('/dashboard')
@@ -120,7 +118,6 @@ def profile_update(request):
             'description': request.POST['description'],
             'prev_email': User.objects.get(id=request.session['id']).email,
         }
-        print postData
         errors = User.objects.validate_profile(postData)
 
     elif 'change_pw' in request.POST:
@@ -134,7 +131,6 @@ def profile_update(request):
     if errors:
         for tag, error in errors.iteritems():
             messages.error(request, error, extra_tags=tag)
-            print error
         return redirect('/users/profile')
 
     return redirect('/dashboard')
@@ -148,7 +144,6 @@ def show(request, id):
         'posts': Post.objects.filter(wall=id).order_by('-created_at'),
         'comments': Comment.objects.all()
     }
-    print context['comments']
     return render(request, 'dashboard/show.html', context)
 
 def post_create(request, id):
@@ -171,6 +166,10 @@ def comment_create(request, post_id, user_id, wall_id):
         'post': int(post_id),
     }
     errors = Comment.objects.validate_comment(postData)
-    # Show error messages for comments here
-    # redirect to wall id
+
     return redirect('/users/show/' + wall_id)
+
+def user_delete(request, id):
+    print User.objects.get(id=id)
+
+    return redirect('/dashboard')

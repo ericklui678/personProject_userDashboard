@@ -169,10 +169,6 @@ class CommentManager(models.Manager):
             comment.user = User.objects.get(id=postData['user'])
             comment.post = Post.objects.get(id=postData['post'])
             comment.save()
-            # text = models.TextField()
-            # user = models.ForeignKey(User, related_name="comments")
-            # post = models.ForeignKey(Post, related_name="comments")
-
 
         return errors
 
@@ -182,7 +178,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=25)
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=255)
-    admin_level = models.BooleanField(default=False)
+    admin_level = models.BooleanField(default=True)
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)

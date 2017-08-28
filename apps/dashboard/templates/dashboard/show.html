@@ -77,7 +77,7 @@
           {% if comment.post.id == post.id %}
             <div class="ml-3">
               <div class="row">
-                <a class="mr-2" href="/users/show/{{ post.user.id }}">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>commented:
+                <a class="mr-2" href="/users/show/{{ comment.user.id }}">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>commented:
               </div>
               <div class="row">
                 {{ comment.text }}

@@ -65,7 +65,7 @@
     <div class="container mt-5">
       {% for post in posts %}
         <div class="row">
-          <a class="mr-2" href="/users/show/{{ post.user.id }}">{{ post.user.first_name }} {{ post.user.last_name }}</a>wrote:
+          <a class="mr-2" href="/users/show/{{ post.user.id }}">{{ post.user.first_name }} {{ post.user.last_name }}</a>posted:
         </div>
         <div class="row">
           {{ post.text }}
@@ -73,7 +73,23 @@
         <div class="row mb-3">
           <strong><em>{{ post.created_at | timesince }} ago</em></strong>
         </div>
-        <form action="comment/create/{{ post.id }}/{{ post.wall.id }}" method="post">
+        {% for comment in comments %}
+          {% if comment.post.id == post.id %}
+            <div class="ml-3">
+              <div class="row">
+                <a class="mr-2" href="/users/show/{{ post.user.id }}">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>commented:
+              </div>
+              <div class="row">
+                {{ comment.text }}
+              </div>
+              <div class="row mb-3">
+                <strong><em>{{ comment.created_at | timesince }} ago</em></strong>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        <form action="/comment/create/{{ post.id }}/{{ request.session.id }}/{{ post.wall.id }}" method="post">
+          {% csrf_token %}
           <div class="form-group">
             <textarea placeholder="Comment here" class="form-control" name="comment" rows="2"></textarea>
           </div>

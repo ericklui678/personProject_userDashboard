@@ -145,9 +145,10 @@ def show(request, id):
 
     context = {
         'user': User.objects.get(id=id),
-        'posts': Post.objects.filter(wall=id).order_by('-created_at')
+        'posts': Post.objects.filter(wall=id).order_by('-created_at'),
+        'comments': Comment.objects.all()
     }
-    print context['posts']
+    print context['comments']
     return render(request, 'dashboard/show.html', context)
 
 def post_create(request, id):
@@ -161,4 +162,15 @@ def post_create(request, id):
     if errors:
         messages.error(request, errors)
 
-    return redirect('/users/show/' + id)
+    return redirect('/users/show/' + str(postData['wall']))
+
+def comment_create(request, post_id, user_id, wall_id):
+    postData = {
+        'text': request.POST['comment'],
+        'user': int(user_id),
+        'post': int(post_id),
+    }
+    errors = Comment.objects.validate_comment(postData)
+    # Show error messages for comments here
+    # redirect to wall id
+    return redirect('/users/show/' + wall_id)

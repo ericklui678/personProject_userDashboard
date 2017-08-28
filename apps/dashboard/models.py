@@ -146,7 +146,7 @@ class PostManager(models.Manager):
     def validate_post(self, postData):
         errors = ''
         if len(postData['text']) < 2:
-            errors = ('Post must be at least 2 characters long')
+            errors = 'Post must be at least 2 characters long'
 
         if not errors:
             post = Post()
@@ -154,6 +154,25 @@ class PostManager(models.Manager):
             post.user = User.objects.get(id=postData['user'])
             post.wall = User.objects.get(id=postData['wall'])
             post.save()
+
+        return errors
+
+class CommentManager(models.Manager):
+    def validate_comment(self, postData):
+        errors = ''
+        if len(postData['text']) < 2:
+            errors = 'Comment must be at least 2 characters long'
+
+        if not errors:
+            comment = Comment()
+            comment.text = postData['text']
+            comment.user = User.objects.get(id=postData['user'])
+            comment.post = Post.objects.get(id=postData['post'])
+            comment.save()
+            # text = models.TextField()
+            # user = models.ForeignKey(User, related_name="comments")
+            # post = models.ForeignKey(Post, related_name="comments")
+
 
         return errors
 
@@ -192,3 +211,5 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, related_name="comments")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+
+    objects = CommentManager()

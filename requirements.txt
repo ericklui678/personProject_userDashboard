@@ -4,3 +4,4 @@ Django==1.10
 gunicorn==19.7.1
 pycparser==2.18
 six==1.10.0
+whitenoise==3.3.0

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from . import models
+from models import *
 
 def index(request):
     # request.session['id'] = 1

@@ -3,6 +3,7 @@ from django.contrib import messages
 from models import *
 
 def index(request):
+    # request.session['id'] = 1
     if request.session.get('id') != None:
         return redirect('/dashboard')
 
@@ -170,6 +171,10 @@ def comment_create(request, post_id, user_id, wall_id):
     return redirect('/users/show/' + wall_id)
 
 def user_delete(request, id):
-    print User.objects.get(id=id)
+    user = User.objects.get(id=id)
+    if user.id == request.session['id']:
+        del request.session['id']
+        del request.session['name']
+    user.delete()
 
     return redirect('/dashboard')

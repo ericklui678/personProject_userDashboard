@@ -14,6 +14,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).on("click", ".remove_user", function() {
+        var fullname = $(this).data('id');
+        var link = $(this).attr("href")
+        $(".modal_content").html(fullname)
+        $(".delete_form").attr("action", link)
+      })
+    })
+  </script>
+
   <nav class="navbar-custom navbar-inverse bg-inverse">
     <div class="container">
       <a class="btn navbar-brand" href="/dashboard">User Dashboard</a>
@@ -49,12 +60,39 @@
           <td>{{ user.created_at | date:"F d, Y" }}</td>
           <td>{{ user.admin_level }}</td>
           {% if curr_user.admin_level == True %}
-            <td><a href="/users/edit/{{ user.id }}">Edit</a> <a href="/users/delete/{{ user.id }}">Remove</a></td>
+            <td><a href="/users/edit/{{ user.id }}">Edit</a> <a href="/users/delete/{{ user.id }}" class="remove_user" data-toggle="modal" data-target="#myModal" data-id="{{ user.first_name }} {{ user.last_name }}">Remove</a></td>
           {% endif %}
         </tr>
         {% endfor %}
       </tbody>
     </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete confirmation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Do you want to delete <strong class="modal_content"></strong>?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form class="delete_form" method="post">
+              {% csrf_token %}
+              <input type="submit" class="btn btn-danger" value="Delete">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
+
 </body>
 </html>

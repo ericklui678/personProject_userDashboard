@@ -20,7 +20,7 @@ def user_create(request):
     }
     errors = User.objects.validate_register(postData)
     if errors:
-        for tag, error in errors.iteritems():
+        for tag, error in errors.items():
             messages.error(request, error, extra_tags=tag)
         return redirect('/')
 
